@@ -17,7 +17,9 @@ app.use(cookieParser());
 
 app.use(
     cors({
-        origin: ["http://localhost:5173"],
+        origin: ["http://localhost:5173",
+                   "https://to-do-app-lgzc-r1ro4panp-srushti-25s-projects.vercel.app"
+        ],
         credentials: true,
     })
 );
