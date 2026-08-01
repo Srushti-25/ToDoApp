@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 
 function AuthDataProvider({ children }) {
     const api = import.meta.env.VITE_BACKEND_URL;
+    console.log("API URL:", api);
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(false);

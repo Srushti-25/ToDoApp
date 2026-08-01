@@ -28,18 +28,31 @@ export default function DashBoard() {
         setDeleteModel(!deletemodel)
     }
     const fetchTasks = async () => {
-        setLoading(true)
-        try {
-            let taskData = await fetch(`${api}/task/alltasks`, {
-                credentials: "include"
-            });
-            let res = await taskData.json();
-            setLoading(false);
-            setTasks(res.data)
-        } catch (error) {
-            console.log("error", error);
+    setLoading(true);
+
+    try {
+        const response = await fetch(`${api}/task/alltasks`, {
+            credentials: "include",
+        });
+
+        const res = await response.json();
+
+        console.log("Fetch Response:", res);
+
+        if (response.ok && res.success) {
+            setTasks(Array.isArray(res.data) ? res.data : []);
+        } else {
+            setTasks([]);
+            toast.error(res.message || "Failed to fetch tasks");
         }
+    } catch (error) {
+        console.error(error);
+        setTasks([]);
+        toast.error("Something went wrong while fetching tasks");
+    } finally {
+        setLoading(false);
     }
+};
     const tooglecreateNote = () => {
         setCreateTask(!createTask)
     }
@@ -55,11 +68,11 @@ export default function DashBoard() {
             content
         };
         if (!title) {
-            toast.error(" this filled is required !")
+            toast.error(" This filled is required !")
             return
         }
         if (!content) {
-            toast.error(" this Description filled is required !")
+            toast.error(" This Description filled is required !")
             return
         }
         setLoading(true)
@@ -67,7 +80,7 @@ export default function DashBoard() {
             const data = await axios.post(`${api}/task/createtask`, createTask, {
                 withCredentials: true
             });
-            console.log("task add data here", data);
+            console.log("Task add data here", data);
             toast.success("Task add successfully")
             setCreateTask(false);
             fetchTasks()
