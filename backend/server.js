@@ -15,14 +15,22 @@ const connectDB = require("./src/config/db");
 app.use(express.json());
 app.use(cookieParser());
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://to-do-app-lgzc-git-main-srushti-25s-projects.vercel.app",
+  "https://to-do-app-lgzc-r1ro4panp-srushti-25s-projects.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://to-do-app-lgzc-git-main-srushti-25s-projects.vercel.app",
-      "https://to-do-app-lgzc-r1ro4panp-srushti-25s-projects.vercel.app"
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
